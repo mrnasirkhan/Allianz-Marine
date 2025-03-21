@@ -1,0 +1,16 @@
+//On Quote we created. one button called as generate code. So once we click on that button, it will be automatically generated a  contract.
+
+<apex:page controller="AL_ContractGenerationCLS"  action="{!generateContract}"  sidebar="false" showHeader="false">        
+  <apex:pageMessages ></apex:pageMessages>
+    
+    <apex:form >
+    	<apex:actionFunction name="redirectRecordPage" action="{!redirectToQuote}"/>
+	</apex:form>
+     <script>
+        function redirect() {
+        	setTimeout(function(){ redirectRecordPage(); }, 3000);        
+        }
+    	redirect();
+    </script> 
+</apex:page>
+                   
