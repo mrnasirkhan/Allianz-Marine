@@ -1,0 +1,819 @@
+<apex:page renderAs="pdf" applyHtmlTag="false" showHeader="false" standardController="Contract__c" extensions="ContractPDFController">
+    <head>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            td {
+                border: 1px solid black;
+                vertical-align: top;
+            }
+            .srNo {
+                padding: 2px;
+                width: 5%;
+                text-align: center;
+                border-right: none;
+            }
+            .content {
+                padding: 2px;
+                border-left: none;
+                border-right: none;
+                min-width: 45%;
+            }
+            .last-content {
+                padding: 2px;
+                border-left: none;
+                min-width: 45%;
+                max-width: 50%;
+            }
+            .cell-container {
+                position: relative;
+                height: 150px;
+                width: 100%;
+            }    
+            .top-text {
+                position: absolute;
+                top: 5px;
+                left: 5px;
+                width: 100%;
+            }
+            .bottom-text {
+                position: absolute;
+                bottom: 5px;
+                left: 5px;
+                width: 100%;
+            }
+            .inner-table-header {
+            	text-align: center;
+            }
+            .inner-table-value {
+            	border: none;
+            	text-align: center;
+            }
+            .no-border {
+            	border: none;
+            }
+            .no-border td {
+            	border: none;
+            }
+            .inner-bullet-indicator {
+            	text-align: left;
+            	width: 8px;
+            	padding-right: 2px;
+            }
+            table {
+				border: 1px solid black;
+            	width: 100%;
+            	border-collapse: collapse;
+            	font-size: 10px;
+            }
+        </style>
+    </head>
+    <body style="font-size: 10px;">
+        <table class="no-border" style="width: 100%;">
+            <tbody>
+                <tr>
+                    <td class="no-border" style="width: 15%;"></td>
+                    <td class="no-border" style="width: 70%; text-align: center;">
+                        <div style="font-size: 16px; font-weight: bold;">
+                            Bareboat Agreement 2017
+                        </div>
+                    </td>
+                    <td class="no-border" style="width: 15%;"></td>
+                </tr>
+                <tr>
+                    <td class="no-border"></td>
+                    <td class="no-border" style="text-align: center;">
+                        <div style="font-size: 12px; font-weight: bold; padding-top: 12px;">
+                            STANDARD BAREBOAT CHARTER PARTY
+                        </div>
+                    </td>
+                    <td class="no-border" style="text-align: right; padding-top: 12px;">
+                        PART I
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <br/><br/><br/>
+        <table style="border: 1px solid black; width: 100%; border-collapse: collapse;">
+            <tbody>
+                <tr>
+                    <td class="srNo">1.</td>
+                    <td class="content" style="width: 45%;">
+                        <div>
+                            Place and date
+                        </div>
+                        <br/>
+                        <div>
+                            <b>{!ct.Place_and_Date__c}</b>
+                        </div>
+                    </td>
+                    <td class="srNo"></td>
+                    <td class="last-content">
+                        <div>
+                            Reference Number: <b>{!ct.S171_Reference_Number__c}</b>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="srNo">2.</td>
+                    <td class="content">
+                        <div>
+                            Owners (Cl. 1)
+                        </div>
+                        <br />
+                        <table class="no-border">
+                            <tbody>
+                                <tr>
+                                    <td class="inner-bullet-indicator">
+                                        (i)
+                                    </td>
+                                    <td>
+                                        <div>
+                                            Name:                                                
+                                        </div>
+                                        <div>
+                                            <b>{!ct.Owner_Name__r.Name}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inner-bullet-indicator">
+                                        (ii)
+                                    </td>
+                                    <td>
+                                        <div>
+                                            Place of registered office:                                             
+                                        </div>
+                                        <div>
+                                            <b>{!ct.BRSI3_Place_of_registered_office__c}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inner-bullet-indicator">
+                                        (iii)
+                                    </td>
+                                    <td>
+                                        <div>
+                                            Law of registry:                                             
+                                        </div>
+                                        <div>
+                                            <b>{!ct.BRSI2_Law_of_registry__c}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td class="srNo">3.</td>
+                    <td class="last-content">
+                        <div>
+                            Charterers (Cl. 1)
+                        </div>
+                        <br />
+                        <table class="no-border">
+                            <tbody>
+                                <tr>
+                                    <td class="inner-bullet-indicator">
+                                        (i)
+                                    </td>
+                                    <td>
+                                        <div>
+                                            Name:                                                
+                                        </div>
+                                        <div>
+                                            <b>{!ct.Account__r.Name}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inner-bullet-indicator">
+                                        (ii)
+                                    </td>
+                                    <td>
+                                        <div>
+                                            Place of registered office:                                             
+                                        </div>
+                                        <div>
+                                            <b>{!ct.BRSI3_Law_of_registry__c}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inner-bullet-indicator">
+                                        (iii)
+                                    </td>
+                                    <td>
+                                        <div>
+                                            Law of registry:                                             
+                                        </div>
+                                        <div>
+                                            <b>{!ct.BRSI3_Law_of_registry__c}</b>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                	<td class="srNo">
+                    	4.
+                    </td>
+                    <td class="last-content" colspan="3">
+                        <div>
+	                    	Vessel (Cl. 1 and 3)                            
+                        </div>
+                        <div>
+                            <apex:repeat value="{!vesselLineItems}" var="line">
+                                <div style="padding: 10px;">
+                                    <table style="border: none; width: 100%;">
+                                        <tbody>
+                                            <tr>
+                                                <td style="border: none; width: 50%;">
+                                                    (i) Name: <b>{!line.Vessel_Name__r.Name}</b>
+                                                </td>
+                                                <td style="border: none; width: 50%;">
+                                                    (v) GT/NT: <b>{!line.GRT_NRT__c}</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border: none; width: 50%;">
+                                                    (ii) IMO number: <b>{!line.IMO_Number__c}</b>
+                                                </td>
+                                                <td style="border: none; width: 50%;">
+                                                    (vi) Summer DWT: <b>{!line.Summer_DWT__c}</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border: none; width: 50%;">
+                                                    (iii) Flag State: <b>{!line.Flag_State__c}</b>
+                                                </td>
+                                                <td style="border: none; width: 50%;">
+                                                    (vii) When/where built: <b>{!line.When_where_built__c}</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border: none; width: 50%;">
+                                                    (iv) Type: <b>{!line.Type__c}</b>
+                                                </td>
+                                                <td style="border: none; width: 50%;">
+                                                    (viii) Classification Society: <b>{!line.Classification_Society__c}</b>
+                                                </td>                             	
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </apex:repeat>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="srNo">5.</td>
+                    <td class="content">
+                        <div>
+                            Date of last special survey by the Vessel’s Classification Society
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI5_Date_of_Last_Classification_Survey__c}</b>
+                        </div>
+                    </td>
+                    <td class="srNo">6.</td>
+                    <td class="last-content">
+                        <div>
+                            Validity of class certificates (state number of
+                        </div>
+                        <br />
+                        <div>
+                            <table class="no-border">
+                                <tbody>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (i)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Delivery (Cl. 3):
+                                            </div>
+                                            <div>
+                                                <b>{!ct.BRSI6_Delivery__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (ii)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Redelivery (Cl. 10):
+                                            </div>
+                                            <div>
+                                                <b>{!ct.BRSI6_Redelivery__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                	<td class="srNo">7.</td>
+                    <td class="content">
+                        <div>
+                            Latent Defects (state number of months to apply) (Cl. 1, 3)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI7_Latent_Defects_Months__c}</b>
+                        </div>
+                    </td>
+                    <td class="srNo">8.</td>
+                    <td class="last-content">
+                        <div>
+                            Port or place of delivery (Cl. 3)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI8_Port_or_place_of_Delivery__c}</b>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="srNo">9.</td>
+                    <td class="content">
+                        <div>
+                            Delivery Notices (Cl. 4)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI9_Delivery_Notices__c}</b>
+                        </div>
+                    </td>
+                    <td class="srNo">10.</td>
+                    <td class="last-content">
+                        <div>
+                            Time for delivery (Cl. 4)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI10_Time_for_delivery__c}</b>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srNo">11.</td>
+                    <td class="content">
+                        <div>
+                            Cancelling Date (Cl. 4, 5)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.Cancelling_date__c}</b>
+                        </div>
+                    </td>
+                    <td class="srNo">12.</td>
+                    <td class="last-content">
+                        <div>
+                            Port or place of redelivery (Cl. 10)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.brsi12_Port_or_place_of_redelivery__c}</b>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srNo">13.</td>
+                    <td class="content">
+                        <div>
+                            Redelivery notices (Cl. 10)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.brsi13_Redelivery_notices__c}</b>
+                        </div>
+                    </td>
+                    <td class="srNo">14.</td>
+                    <td class="last-content">
+                        <div>
+                            Trading limits (Cl. 11)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI14_Trading_limits__c}</b>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srNo">15.</td>
+                    <td class="content">
+                        <div>
+                            Bunker fuels, unused oils and greases (optional, state if (a) (actual net price), or (b) (current net market price) to apply) (Cl. 9)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI15_Bunker_fuels__c}</b>
+                        </div>
+                    </td>
+                    <td class="srNo">16.</td>
+                    <td class="last-content">
+                        <div>
+                            Charter period (Cl. 2)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI16_Charter_period__c}</b>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="srNo">17.</td>
+                    <td class="content">
+                        <div>
+                            Charter hire (state currency and amount) (Cl. 2, 10 and 15)
+                        </div>
+                        <br />
+                        <table class="no-border">
+                            <tbody>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(i)</td>
+                                    <td>
+                                        <div>Charter hire:</div>
+                                        <div><b>{!ct.Charter_hire__c}</b></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(ii)</td>
+                                    <td>
+                                        <div>Charter hire for optional period:</div>
+                                        <div><b>{!ct.Charter_Hire_for_Optional_Period__c}</b></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td class="srNo">18.</td>
+                    <td class="last-content">
+                        <div>
+                            Optional period and notice (Cl. 2)
+                        </div>
+                        <br />
+                        <table class="no-border">
+                            <tbody>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(i)</td>
+                                    <td>
+                                        <div>State extension period in months:</div>
+                                        <div><b>{!ct.BRSI18_Ext_Period_Months__c}</b></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(ii)</td>
+                                    <td>
+                                        <div>State when declarable:</div>
+                                        <div><b>{!ct.Declarable_Date__c}</b></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srNo">19.</td>
+                    <td class="content">
+                        <div>
+                            Rate of interest payable (Cl. 15(g))
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI19_Rate_of_interest_payable__c}</b>
+                        </div>
+                    </td>
+                    <td class="srNo">20.</td>
+                    <td class="last-content">
+                        <div>
+                            Owners' bank details (state beneficiary and bank account) (Cl. 15)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI20_Owners_bank_details__c}</b>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srNo">21.</td>
+                    <td class="last-content" colspan="3">
+                        <div>
+                            New class and other regulatory requirements (Cl. 13(b))
+                        </div>
+                        <br />
+                        <table class="no-border">
+                            <tbody>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(i)</td>
+                                    <td>
+                                        <div>State if 13(b)(i) or (ii) to apply:</div>
+                                        <div><b>{!ct.BRSI21_State__c}</b></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(ii)</td>
+                                    <td>
+                                        <div>Threshold amount (AMT):</div>
+                                        <div><b>{!ct.BRSI21_Threshold_amount_AMT__c}</b></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(iii)</td>
+                                    <td>
+                                        <div>Vessel's expected remaining life in years on the date of delivery:</div>
+                                        <div><b>{!ct.BRSI21_Expected_Vessel_Life_Years__c}</b></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="srNo">22.</td>
+                    <td class="last-content" colspan="3">
+                        <div>
+                            Mortgage(s), if any (state if 16(a) or (b) to apply; if 16(b) applies state date of Financial Instrument and name of Mortgagee(s)/Place of business) (Cl. 1, 16)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.Mortgage_s__c}</b>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srNo">23.</td>
+                    <td class="content">
+                        <div>
+                            Insured Total Loss value (Cl. 17)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI23_Insured_Total_Loss_value__c}</b>
+                        </div>
+                    </td>
+                    <td class="srNo">24.</td>
+                    <td class="last-content">
+                        <div>
+                            Insuring party (state if Cl. 17(b) (Charterers to insure) or Cl. 17(c) (Owners to insure) to apply)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI24_Insuring_party__c}</b>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srNo">25.</td>
+                    <td class="last-content" colspan="3">
+                        <div>
+                            Performance guarantee (state amount and entity) (Cl. 27) (optional)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI25_PG_amount_entity__c}</b>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srNo">26.</td>
+                    <td class="last-content" colspan="3">
+                        <div>
+                            Dispute Resolution (state 33(a), 33(b), 33(c) or 33(d); if 33(c) is agreed, state Singapore or English law; if 33(d) is agreed, state governing law and place of arbitration) (Cl. 33)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI26_Dispute_Resolution__c}</b>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srNo">27.</td>
+                    <td class="last-content" colspan="3">
+                        <div>
+                            Newbuilding Vessel (indicate with "yes" or "no" whether PART III applies and if "yes", complete details below) (optional)
+                        </div>
+                        <br />
+                        <table class="no-border">
+                            <tbody>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(i)</td>
+                                    <td>
+                                        <div>Name of Builders:</div>
+                                        <div><b>{!ct.BRSI27_Name_of_Builders__c}</b></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(ii)</td>
+                                    <td>
+                                        <div>Number:</div>
+                                        <div><b>{!ct.BRSI27_Number__c}</b></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(iii)</td>
+                                    <td>
+                                        <div>Date of new building contract:</div>
+                                        <div><b>{!ct.BRSI27_Date_of_newbuilding_contract__c}</b></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(iv)</td>
+                                    <td>
+                                        <div>Liquidated damages for physical defects or deficiencies (state party):</div>
+                                        <div><b>{!ct.BRSI27_LD_Defect_Penalty_State_Party__c}</b></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(v)</td>
+                                    <td>
+                                        <div>Liquidated damages for delay in delivery (state party):</div>
+                                        <div><b>{!ct.BR27Delivery_L_Delay_Penalty_State_Party__c}</b></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srNo">28.</td>
+                    <td class="content">
+                        <div>
+                            Purchase Option (indicate with "yes" or "no" whether PART IV applies) (optional)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.Purchase_Option__c}</b>
+                        </div>
+                    </td>
+                    <td class="srNo">29.</td>
+                    <td class="last-content">
+                        <div>
+                            Bareboat Charter Registry (indicate with "yes" or "no" whether PART V applies and if "yes", complete details below) (optional)
+                        </div>
+                        <br />
+                        <table class="no-border">
+                            <tbody>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(i)</td>
+                                    <td>
+                                        <div>Underlying Registry:</div>
+                                        <div><b>{!ct.BRSI29_Underlying_Registry__c}</b></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inner-bullet-indicator">(ii)</td>
+                                    <td>
+                                        <div>Bareboat Charter Registry:</div>
+                                        <div><b>{!ct.Bareboat_Charter_Registry__c}</b></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srNo">30.</td>
+                    <td class="content">
+                        <div>
+                            Notices to Owners (state full style details for serving notices) (Cl. 34)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI30_Notices_to_Owners__c}</b>
+                        </div>
+                    </td>
+                    <td class="srNo">31.</td>
+                    <td class="last-content">
+                        <div>
+                            Notices to Charterers (state full style details for serving notices) (Cl. 34)
+                        </div>
+                        <br />
+                        <div>
+                            <b>{!ct.BRSI31_Notices_to_Charterers__c}</b>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br />
+        <br />
+
+        <div style="text-align: justify">
+            {!ct.Mutually_Agreed__c}
+            <!--<apex:outputPanel rendered="{!ISBLANK(ct.Mutually_Agreed__c)}">
+                It is mutually agreed that this Charter Party shall be performed subject to the conditions contained in this Charter Party
+                which shall include PART I and PART II. In the event of a conflict of conditions, the provisions of PART I shall prevail
+                over those of PART II to the extent of such conflict but no further. It is further mutually agreed that PART III and/or PART
+                IV and/or PART V shall only apply and only form part of this Charter Party if expressly agreed and stated in Box 27, 28 and
+                29. If PART III and/or PART IV and/or PART V applies, it is further agreed that in the event of a conflict of conditions,
+                the provisions of PART I and PART II shall prevail over those of PART III and/or PART IV and/or PART V to the extent of such
+                conflict but no further.
+            </apex:outputPanel>-->
+        </div>
+
+        <br />
+        <br />
+
+        <table style="width: 100%; border-collapse: collapse;">
+            <tbody>
+                <tr style="height: 150px">
+                    <td>
+                        <div class="cell-container">
+                            <div class="top-text">Signature (Owners)</div>
+                            <div class="bottom-text">{!ct.Owner_Name__r.Name}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="cell-container">
+                            <div class="top-text">Signature (Charterers)</div>
+                            <div class="bottom-text">{!ct.Account__r.Name}</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</apex:page>
+
+<!--<tr>
+                    <td colspan="2">
+                        <div>
+                            4.&nbsp;&nbsp;&nbsp;&nbsp;Vessel (Cl. 1 and 3)
+                        </div>
+                        <br/>
+                        <div>
+                            <table style="border-collapse: collapse; width: 100%;">
+                                <thead style="background: #B4C6E8;">
+                                    <tr>
+                                        <th class="inner-table-header">Vessel Name</th>
+                                        <th class="inner-table-header">IMO Number</th>
+                                        <th class="inner-table-header">Flag State</th>
+                                        <th class="inner-table-header">Type</th>
+                                        <th class="inner-table-header">GT/NT</th>
+                                        <th class="inner-table-header">Summer DWT</th>
+                                        <th class="inner-table-header">When/Where built</th>
+                                        <th class="inner-table-header">Classification Society</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!vesselLineItems}" var="line">
+                                        <tr>
+                                            <td class="inner-table-value">
+                                                {!line.Vessel_Name__r.Name}
+                                            </td>
+                                            <td class="inner-table-value">
+                                                {!line.IMO_Number__c}
+                                            </td>
+                                            <td class="inner-table-value">
+                                                
+                                            </td>
+                                            <td class="inner-table-value">
+                                                
+                                            </td>
+                                            <td class="inner-table-value">
+                                                
+                                            </td>
+                                            <td class="inner-table-value">
+                                                
+                                            </td>
+                                            <td class="inner-table-value">
+                                                
+                                            </td>
+                                            <td class="inner-table-value">
+                                                
+                                            </td>
+                                        </tr>                                        
+                                    </apex:repeat>
+                                </tbody>
+                            </table>
+                            <br />
+                            <div>
+                                Rate Quoted is per day pro rata net to owners.
+                            </div>
+                        </div>
+                    </td>
+                </tr> -->
