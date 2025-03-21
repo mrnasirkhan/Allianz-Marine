@@ -1,0 +1,55 @@
+@isTest
+private class QuotePDFControllerTest {
+    @isTest
+    static void testQuotePDFController() {
+        // Create test data
+        Account acc = TestDataFactory.createAccount();
+        Contact con = TestDataFactory.createContact(acc.Id);
+        Opportunity opp = TestDataFactory.createOpportunity(acc.Id);
+        Quote qt = TestDataFactory.createQuote(acc.Id, opp.Id, con.Id);
+        
+        // Set up the page reference
+        PageReference pageRef = Page.Allianz_00_PDF; // Assuming the page is named QuotePDF
+        Test.setCurrentPage(pageRef);
+        ApexPages.currentPage().getParameters().put('id', qt.Id);
+        
+        // Create the controller
+        ApexPages.StandardController stdController = new ApexPages.StandardController(qt);
+        Test.startTest();
+        QuotePDFController controller = new QuotePDFController(stdController);
+        Test.stopTest();
+        
+        // Assert controller loaded data correctly
+        System.assertNotEquals(null, controller.qt, 'Quote should be retrieved');
+        System.assertEquals(qt.Id, controller.qt.Id, 'Quote ID should match');
+        
+        // Test contact designation formatting
+        System.assertEquals('', controller.contactDesignation, 'Contact designation should be empty when Quote.Designation_of_the_Contact__c is blank');
+        
+        // Test exclusions and terms lists
+        System.assertNotEquals(null, controller.exclusionsForAMSandGMS, 'Exclusions for AMS and GMS should not be null');
+        System.assertNotEquals(null, controller.otherTermsAndConditionsForAMSandGMS, 'Terms for AMS and GMS should not be null');
+        System.assertNotEquals(null, controller.exclusionsForAfricaAndSouthAfrica, 'Exclusions for Africa should not be null');
+        System.assertNotEquals(null, controller.otherTermsAndConditionsForAfricaAndSouthAfrica, 'Terms for Africa should not be null');
+    }
+    
+    @isTest
+    static void testContactDesignation() {
+        // Create test data
+        Account acc = TestDataFactory.createAccount();
+        Contact con = TestDataFactory.createContact(acc.Id);
+        Opportunity opp = TestDataFactory.createOpportunity(acc.Id);
+        Quote qt = TestDataFactory.createQuote(acc.Id, opp.Id, con.Id);
+        
+        // Set up the page reference
+        PageReference pageRef = Page.Allianz_00_PDF;
+        Test.setCurrentPage(pageRef);
+        ApexPages.currentPage().getParameters().put('id', qt.Id);
+        
+        // Create the controller
+        ApexPages.StandardController stdController = new ApexPages.StandardController(qt);
+        Test.startTest();
+        QuotePDFController controller = new QuotePDFController(stdController);
+        Test.stopTest();
+    }
+}
