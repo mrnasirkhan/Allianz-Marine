@@ -1,0 +1,100 @@
+public class QuotePDFController {
+  public Quote qt { get; set; }
+  public List<QuoteLineItem> qlis { get; set; }
+  public List<String> vesselNames { get; set; }
+  /*public List<String> generalTermsAndConditions { get; set; }
+   public List<String> generalExclusions { get; set; }*/
+  public List<String> exclusionsForAMSandGMS { get; set; }
+  public List<String> otherTermsAndConditionsForAMSandGMS { get; set; }
+  public List<String> exclusionsForAfricaAndSouthAfrica { get; set; }
+  public List<String> otherTermsAndConditionsForAfricaAndSouthAfrica {
+    get;
+    set;
+  }
+  public String contactDesignation { get; set; }
+
+  public QuotePDFController(ApexPages.StandardController controller) {
+    qt = [
+      SELECT
+        Id,
+        Enquiry_Owner_Reference__c,
+        Account.Name,
+        Proposal_Date__c,
+        Area_of_operation__c,
+        Meals__c,
+        Bunks__c,
+        Scope_of_Work__c,
+        Commencement__c,
+        Duration__c,
+        Delivery_Redelivery__c,
+        Payment_Terms__c,
+        Validity_of_offer__c,
+        Excludes__c,
+        Other_general_conditions__c,
+        Other_general_conditions_afrc__c,
+        Excludes_Africa_South_America__c,
+        Contact.Name,
+        Designation_of_the_Contact__c,
+        Charter_Rate_Terms__c
+      FROM Quote
+      WHERE Id = :ApexPages.currentPage().getParameters().get('id')
+      WITH USER_MODE
+    ];
+
+    contactDesignation = String.isBlank(qt.Designation_of_the_Contact__c)
+      ? ''
+      : qt.Designation_of_the_Contact__c + ' -';
+
+    Map<Id, QuoteLineItem> myQlis = new Map<Id, QuoteLineItem>(
+      [
+        SELECT
+          Id,
+          Vessel_Name_in_PDF__c,
+          Product2.Name,
+          UnitPrice,
+          Mobilization__c,
+          Demobilization__c
+        FROM QuoteLineItem
+        WHERE QuoteId = :qt.Id
+        WITH USER_MODE
+      ]
+    );
+
+    qlis = new List<QuoteLineItem>();
+    qlis.addAll(myQlis.values());
+
+    Set<String> uniqueVesselNames = new Set<String>();
+    vesselNames = new List<String>();
+
+    for (QuoteLineItem qli : myQlis.values()) {
+      if (uniqueVesselNames.add(qli.Product2.Name)) {
+        vesselNames.add(qli.Product2.Name + '/ Similar');
+      }
+    }
+
+    /*
+        generalTermsAndConditions = new List<String>();
+        generalTermsAndConditions.add('Offer is subject to availability of the vessel at the time of confirmation, subject to mutually agreed contract & BOD approvals.');
+        generalTermsAndConditions.add('Vessel is offered based on the specifications attached. Charterer to inspect and accept vessel specification prior to departure from port of delivery.');
+        generalTermsAndConditions.add('Any additional compliance requirements will be charged to Charterer at cost +15%.');
+        generalTermsAndConditions.add('The terms and conditions in this proposal will remain in force until such time as a BIMCO “SUPPLYTIME 2017” suitably amended is signed by both parties.');
+        generalTermsAndConditions.add('Vessels offered (where applicable) are based on Standard DP manning & catering only and any additional requirements shall be arranged at charterers cost & time.');
+        
+        generalExclusions = new List<String>();
+        generalExclusions.add('All consumables Fuel, Fresh Water, Fire-fighting foam, Lube oil, Detergent etc.');
+        generalExclusions.add('All local licenses or import/ export/ Navigation License, operating permits for vessel, additional insurance etc.');
+        generalExclusions.add('Custom duties for import/ export of vessel into / out of charterers\' designated country of operation. Any quarantine requirements, standby etc. as per local port regulations etc.');
+        generalExclusions.add('All taxes including withholding tax, VAT, income tax etc.');
+        generalExclusions.add('Any Modification/ additional fitting to the vessel, if required.');
+        generalExclusions.add('All agency fees, pilotage fee, port dues etc transport of crew and provision/ spares to offshore location.');
+        generalExclusions.add('Cost & time in case of any change in area of operation.');
+        */
+    exclusionsForAMSandGMS = qt.Excludes__c?.split('\n');
+    otherTermsAndConditionsForAMSandGMS = qt.Other_general_conditions__c
+      ?.split('\n');
+    exclusionsForAfricaAndSouthAfrica = qt.Excludes_Africa_South_America__c
+      ?.split('\n');
+    otherTermsAndConditionsForAfricaAndSouthAfrica = qt.Other_general_conditions_afrc__c
+      ?.split('\n');
+  }
+}
