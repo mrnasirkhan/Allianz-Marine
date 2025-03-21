@@ -1,0 +1,28 @@
+@isTest
+private class ContractPDFControllerTest {
+  @isTest
+  static void testContractPDFController() {
+    // Create test data
+    Account acc = TestDataFactory.createAccount();
+    Contract__c testContract = TestDataFactory.createContract(acc.Id);
+
+    // Set up the page parameters
+    PageReference pageRef = Page.Contract_Barecon_PDF; // Replace with actual page name
+    pageRef.getParameters().put('id', testContract.Id);
+    Test.setCurrentPage(pageRef);
+
+    // Create the controller
+    ApexPages.StandardController stdController = new ApexPages.StandardController(
+      testContract
+    );
+    ContractPDFController controller = new ContractPDFController(stdController);
+
+    // Assert the controller retrieved the data correctly
+    System.assertNotEquals(null, controller.ct, 'Contract should be retrieved');
+    System.assertEquals(
+      testContract.Id,
+      controller.ct.Id,
+      'Contract ID should match'
+    );
+  }
+}
