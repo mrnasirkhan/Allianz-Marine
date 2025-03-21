@@ -1,0 +1,776 @@
+<apex:page renderAs="pdf" applyHtmlTag="false" showHeader="false" standardController="Contract__c" extensions="ContractPDFController">
+    <head>
+        <style>
+            * {
+            margin: 0;
+            padding: 0;
+            }
+            @page {
+	            padding-top: 30px;
+                @top-center {
+                	content: element(header);
+                }
+            }
+            div.header {
+                position: running(header);
+            }
+            .srNo {
+            padding: 2px;
+            width: 5%;
+            text-align: center;
+            border-right: none;
+            }
+            .content {
+            padding: 2px;
+            border-left: none;
+            border-right: none;
+            width: 45%;
+            }
+            .last-content {
+            padding: 2px;
+            border-left: none;
+            min-width: 45%;
+            max-width: 50%;
+            }
+            td {
+            border: 1px solid black;
+            vertical-align: top;
+            }
+            .cell-container {
+                position: relative;
+                height: 150px;
+                width: 100%;
+            }    
+            .top-text {
+                position: absolute;
+                top: 5px;
+                left: 5px;
+                width: 100%;
+            }
+            .bottom-text {
+                position: absolute;
+                bottom: 5px;
+                left: 5px;
+                width: 100%;
+            }
+            table {
+				border: 1px solid black;
+            	width: 100%;
+            	border-collapse: collapse;
+            }
+            .no-border {
+            	border: none;
+            }
+            .no-border td {
+            	border: none;
+            }
+            .inner-bullet-indicator {
+            	text-align: left;
+            	width: 8px;
+            	padding-right: 2px;
+            }
+        </style>
+    </head>
+    <body style="font-size: 10px;">
+        <div class="header">
+            <br />
+            <div align="center" style="font-size: 16px; font-weight: bold;">
+                Ship Management agreement 2024
+            </div>
+            <br />
+            <div align="center" style="font-size: 12px; font-weight: bold;">
+                STANDARD SHIP MANAGEMENT AGREEMENT
+            </div>
+        </div>
+        <div class="main-content">
+            <table>
+                <tbody>
+                    <tr>
+                    	<td class="srNo"></td>
+                        <td class="content">
+                        	<div>
+                                Vessel’s name and IMO number (Annex A)
+                            </div>
+                            <div>
+                                <apex:repeat value="{!vesselLineItems}" var="line">
+                                    <b>{!line.Vessel_Name__r.Name} ({!line.IMO_Number__c})</b><br/>
+                                </apex:repeat>
+                            </div>
+                        </td>
+                        <td class="srNo"></td>
+                        <td class="last-content" colspan="3">
+                        	Reference Number: <b>{!ct.S171_Reference_Number__c}</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo">
+                            1.
+                        </td>
+                        <td class="content">
+                            <div>
+                                Place and date of Agreement (Cl. 35)
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.Place_and_Date__c}</b>
+                            </div>
+                        </td>
+                        <td class="srNo">
+                        	2.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Date of commencement of Agreement (Cls. 2 and 30)
+                            </div>
+                            <br />
+                            <div>
+                                <b>
+                                    <apex:outputText value="{0, date,dd MMMM yyyy}">
+                                        <apex:param value="{!ct.S242Date_of_commencement_of_Agreement__c}" />
+                                    </apex:outputText>
+                                </b>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo">
+                            3.
+                        </td>
+                        <td class="content">
+                            <div>
+                                Owners (name, place of registered oﬃce and law of registry) (Cl. 1)
+                            </div>
+                            <br />
+                            <table class="no-border">
+                                <tbody>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (i)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Name:                                                
+                                            </div>
+                                            <div>
+                                                <b>{!ct.Owner_Name__r.Name}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (ii)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Place of registered office:                                             
+                                            </div>
+                                            <div>
+                                                <b><apex:outputText value="{!ct.Owners_Place_of_Business__c}" escape="false" /></b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (iii)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Law of registry:                                                
+                                            </div>
+                                            <div>
+                                                <b>{!ct.BRSI2_Law_of_registry__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="srNo">
+                            4.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Managers (name, place of registered oﬃce and law of registry) (Cl. 1)
+                            </div>
+                            <br />
+                            <table class="no-border">
+                                <tbody>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (i)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Name:                                                
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S244_Name__r.Name}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (ii)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Place of registered office:                                             
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S245Place_of_registered_o_ce__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (iii)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Law of registry:                                                
+                                            </div>
+                                            <div>
+                                                <b>{!ct.BRSI3_Law_of_registry__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo" rowspan="3">
+                            5.
+                        </td>
+                        <td class="content" rowspan="3">
+                            <div>
+                                The Company (with reference to the ISM/ISPS Codes) (state name and IMO Unique Company 
+                                Identiﬁcation number. If the Company is a third party then also state registered oﬃce 
+                                and principal place of business) (Cls. 1 and 9(c)(i))
+                            </div>
+                            <br />
+                            <table class="no-border">
+                                <tbody>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (i)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Name:                                               
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S245Company_Name__r.Name}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (ii)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                IMO Unique Company Identiﬁcation number:                                             
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S245IMO_Uniqe_Company_Identi_cation_No__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (iii)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Place of registered oﬃce:                                             
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S245Place_of_registered_o_ce__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (iv)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Principal place of business:                                             
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S245Principal_place_of_business__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td class="srNo">
+                            6.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Technical Management (state “yes” or “no” as agreed) (Cl. 4)
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S246Technical_Management__c}</b>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo">
+                            7.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Crew Management (state “yes” or “no” as agreed) (Cl. 5(a))
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S247Crew_Management__c}</b>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo">
+                            8.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Commercial Management (state “yes” or “no” as agreed) (Cl. 6)
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S248Commercial_Management__c}</b>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo">
+                            9.
+                        </td>
+                        <td class="content">
+                            <div>
+                                Chartering Services period (only to be ﬁlled in if “yes” stated in Box 8) (Cl.6(a))
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S249Chartering_Services_period__c}</b>
+                            </div>
+                        </td>
+                        <td class="srNo">
+                            10.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Crew Insurance arrangements (state “yes” or “no” as agreed)
+                            </div>
+                            <br />
+                            <table class="no-border">
+                                <tbody>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (i)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Crew Insurances* (Cl. 5(b)):                                               
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S2410Crew_Insurances__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (ii)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Insurance for persons proceeding to sea onboard (Cl. 5(b)(i)):                                             
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S2410Insurance_for_persons_proceeding_to__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br />
+                            <div>
+                                *only to apply if Crew Management (Cl. 5(a)) agreed (see Box 7) 
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo">
+                            11.
+                        </td>
+                        <td class="content">
+                            <div>
+                                Insurance arrangements (state “yes” or “no” as agreed) (Cl. 7)
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S2411Insurance_arrangements__c}</b>
+                            </div>
+                        </td>
+                        <td class="srNo">
+                            12.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Optional insurances (state optional insurance(s) as agreed, such as kidnap and ransom, loss of hire and FD D) (Cl. 11(a)(iv))
+                            </div>                            
+                            <br />
+                            <div>
+                                <b>{!ct.S2412Optional_insurances__c}</b>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo">
+                            13.
+                        </td>
+                        <td class="content">
+                            <div>
+                                Interest (state rate of interest to apply after due date to outstanding sums) (Cl. 9(a))
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S2413Interest__c}</b>
+                            </div>
+                        </td>
+                        <td class="srNo">
+                            14.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Emission Trading Scheme Allowances (Cl. 10)
+                            </div>
+                            <br />
+                            <table class="no-border">
+                                <tbody>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (i)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Subclause (a)(iii) to apply (state “yes” or “no” as agreed):
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S2414SubclauseyesorNo__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (ii)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Subclause (b)(iii), (iv) and (v) (state number of days to apply):                                             
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S2412Subclause_state_no_of_days_to_apply__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (iii)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Subclause (c) (state fee, if not included in annual management fee):                                             
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S2414Subclause_State_fee_if_excl_fr_anl__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo">
+                            15.
+                        </td>
+                        <td class="content">
+                            <div>
+                                Management fees (state amounts) (Cl. 13(a))
+                            </div>
+                            <br />
+                            <table class="no-border">
+                                <tbody>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (i)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Predelivery management fee:
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S2415Predelivery_management_fee__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (ii)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Annual management fee:
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S2415Annual_management_fee__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div>
+                                <b>{!ct.S2415Predelivery_management_fee__c}</b>
+                            </div>
+                        </td>
+                        <td class="srNo">
+                            16.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Attendance fee (state amount and number of days) (Cl. 13(c))
+                            </div>
+                            <br />
+                            <table class="no-border">
+                                <tbody>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (i)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                Daily rate:
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S2416Daily_rate__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="inner-bullet-indicator">
+                                            (ii)
+                                        </td>
+                                        <td>
+                                            <div>
+                                                For attendance in excess of number of days per year pro rata:                                             
+                                            </div>
+                                            <div>
+                                                <b>{!ct.S2416For_attendance_i_excess_of_no_of_da__c}</b>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo">
+                            17.
+                        </td>
+                        <td class="content">
+                            <div>
+                                Nominated bank account (Cl.13(a))
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S2417Nominated_bank_account__c}</b>
+                            </div>
+                        </td>
+                        <td class="srNo">
+                            18.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Lay-up period / number of months (Cl.13(d))
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S2418Lay_up_period_number_of_months__c}</b>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo">
+                            19.
+                        </td>
+                        <td class="content">
+                            <div>
+                                Minimum contract period (state number of months) (Cl. 30(a))
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S2419Minimum_contract_period__c}</b>
+                            </div>
+                        </td>
+                        <td class="srNo">
+                            20.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Management fee on termination (state number of months to apply) (Cl. 31(h))
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S2420Management_fee_on_termination__c}</b>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo">
+                            21.
+                        </td>
+                        <td class="content">
+                            <div>
+                                Severance Costs (state maximum amount) (Cl.31(i))
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S2421Severance_Costs__c}</b>
+                            </div>
+                        </td>
+                        <td class="srNo">
+                            22.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Law &amp; arbitration ((a) English law/London arbitration, (b) US law/New York arbitration, 
+                                (c) English law/Singapore arbitration, (d) Singapore law/Singapore arbitration, (e) Hong Kong
+                                law/Hong Kong arbitration, (f) English law/Hong Kong arbitration, (g) Other. Choose law and
+                                arbitration venue. If alternative (g)(Other) is chosen, Clause 32 must be appropriately ﬁlled 
+                                in or replaced, failing which alternative (a)(English law/London arbitration) shall apply)
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S2422Law_arbitration__c}</b>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo">
+                            23.
+                        </td>
+                        <td class="content">
+                            <div>
+                                Email address for receipt of arbitration notices and communications on behalf of Owners (Cl.32)
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S2423Email_address_on_behalf_of_Owners__c}</b>
+                            </div>
+                        </td>
+                        <td class="srNo">
+                            24.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Email address for receipt of arbitration notices and communications on behalf of Managers (Cl. 32)
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S2424Email_address_on_behalf_of_Managers__c}</b>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="srNo">
+                            25.
+                        </td>
+                        <td class="content">
+                            <div>
+                                Notices (state full style contact details for serving notice to the Owners) (Cl. 34)
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S2425Notice_to_the_Owners__c}</b>
+                            </div>
+                        </td>
+                        <td class="srNo">
+                            26.
+                        </td>
+                        <td class="last-content" colspan="3">
+                            <div>
+                                Notices (state full style contact details for serving notice to the Managers) (Cl. 34)
+                            </div>
+                            <br />
+                            <div>
+                                <b>{!ct.S2426Notice_to_the_Managers__c}</b>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <br />
+            <br />
+            
+            <div style="text-align: justify">
+                <!--<apex:outputPanel rendered="{!ISBLANK(ct.Mutually_Agreed__c)}">
+                    It is mutually agreed between the Party stated in Box 3 and the Party stated in Box 4 that this 
+                    Agreement consisting of PART l and PART ll as well as Annexes “A” (Details of Vessel or Vessels),
+                    “B” (Details of Crew), “C” (Budget), “D” (Associated Vessels) and “E” (Fee Schedule) attached 
+                    hereto, shall be performed subject to the conditions contained herein. In the event of a conﬂict 
+                    of conditions, the provisions of PART l and Annexes “A”, “B”, “C”, “D” and “E” shall prevail over 
+                    those of PART ll to the extent of such conﬂict but no furth according to the foregoing priority
+                    of documents.
+                </apex:outputPanel>-->
+                {!ct.Mutually_Agreed__c}
+            </div>
+            
+            <br />
+            <br />
+            
+            <table style="width: 100%; border-collapse: collapse;">
+                <tbody>
+                    <tr style="height: 150px">
+                        <td>
+                            <div class="cell-container">
+                                <div class="top-text">Signature (Owners)</div>
+                                <div class="bottom-text">
+                                	<div>
+                                        Name:
+                                    </div>
+                                    <br />
+                                    <div>
+                                        Position:
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="cell-container">
+                                <div class="top-text">Signature (Charterers)</div>
+                                <div class="bottom-text">
+                                    <div>
+                                        Name:
+                                    </div>
+                                    <br />
+                                    <div>
+                                        Position:
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>    
+        </div>
+        
+    </body>
+</apex:page>
+              
