@@ -1,0 +1,305 @@
+@isTest
+public class AL_ContractGenerationCLS_Test {
+    static testMethod void testGenerateContract() {
+        // Fetch the Record Type dynamically
+        Id contractRecordTypeId = [SELECT Id FROM RecordType WHERE DeveloperName = 'Barecon_2017' AND SObjectType = 'Contract__c' LIMIT 1].Id;
+        // Setup test data
+        Account acc = new Account(Name = 'Test Account');
+        insert acc;
+        Opportunity opp = new Opportunity(Name = 'Test Opportunity', StageName = 'Prospecting', CloseDate = System.today(),AccountId = acc.Id);
+        insert opp;
+        // Create a Vessel
+        Product2 prod = new Product2(Name = 'Test Vessel', IsActive = true,Year_Built__c='2000',
+                                     Length_Overall__c = '112',
+                                     POB__c = '22', 
+                                     Fire_Fighting_Fi_Fi__c = '112', 
+                                     Crane__c = 'No', 
+                                     DP_Non_DP__c = 'DP-1',
+                                     Port_of_Registry__c = 'Panama', 
+                                     Notation__c = 'New',
+                                     Deck_Area__c = '12',
+                                     Deadweight__c = '22',
+                                     GRT_NRT__c = '22', 
+                                     Vessel_Owner__c = acc.Id
+                                    );
+                         insert prod;
+        // Create a PricebookEntry
+        Pricebook2 pb = new Pricebook2(Name = 'Standard Price Book', IsActive = true);
+        insert pb;
+        Id pbId =Test.getStandardPricebookId(); 
+        PricebookEntry pbe = new PricebookEntry(Product2Id = prod.Id, Pricebook2Id = pbId, UnitPrice = 1000, IsActive = true);
+        insert pbe;
+        // Create a Quote
+        Quote qt = new Quote(
+            Name = 'Test Quote',
+            OpportunityId = opp.Id,
+            Approval_Status__c = 'Approved',
+            Status = 'Accepted',
+            PDF_Format_Type__c = 'GMS Standard',
+            Contract_Generated__c = false,
+            Contract_PDF_Type__c = 'Barecon 2017',
+            CurrencyIsoCode = 'USD',
+            All_Vessels_in_One_Contract__c = 'No',
+            Pricebook2Id = pbId
+        );
+        insert qt;
+        // Create a Quote Line Item
+        QuoteLineItem qli = new QuoteLineItem(
+            QuoteId = qt.Id,
+            Product2Id = prod.Id,
+            UnitPrice = 1000,
+            Quantity = 1,
+            PricebookEntryId = pbe.Id
+        );
+        insert qli;
+        Contract__c ct = new Contract__c(
+            Name='Test ct',
+            BRSI0_Type_of_Contract__c = 'Bareboat',
+            Contract_Start_Date__c  =System.Today(),
+            RecordTypeId = contractRecordTypeId,
+            BRSI1_Place__c = 'IN'
+                );
+        insert ct;
+        Contract_Vessels__c coVessel = new Contract_Vessels__c(
+            Contract__c = ct.Id
+        );
+        insert coVessel;
+        // Set the Quote ID parameter in the VF Page
+        // Instantiate the controller class
+        Test.startTest();
+        PageReference pageRef = Page.AL_ContractGenerationVF;
+        pageRef.getParameters().put('id', qt.Id);
+        Test.setCurrentPage(pageRef);
+        AL_ContractGenerationCLS contractGen = new AL_ContractGenerationCLS();
+        contractGen.redirectToQuote();
+        contractGen.generateContract();  // Execute the method to generate contract
+        Test.stopTest();
+    }
+    static testMethod void testGenerateContract1() {
+        // Fetch the Record Type dynamically
+        Id contractRecordTypeId = [SELECT Id FROM RecordType WHERE DeveloperName = 'Shipman_2024' AND SObjectType = 'Contract__c' LIMIT 1].Id;
+        // Setup test data
+        Account acc = new Account(Name = 'Test Account');
+        insert acc;
+        Opportunity opp = new Opportunity(Name = 'Test Opportunity', StageName = 'Prospecting', CloseDate = System.today(),AccountId = acc.Id);
+        insert opp;
+        // Create a Vessel
+        Product2 prod = new Product2(Name = 'Test Vessel', IsActive = true,Year_Built__c='2000',
+                                     Length_Overall__c = '112',
+                                     POB__c = '22', 
+                                     Fire_Fighting_Fi_Fi__c = '112', 
+                                     Crane__c = 'No', 
+                                     DP_Non_DP__c = 'DP-1',
+                                     Port_of_Registry__c = 'Panama', 
+                                     Notation__c = 'New',
+                                     Deck_Area__c = '12',
+                                     Deadweight__c = '22',
+                                     GRT_NRT__c = '22', 
+                                     Vessel_Owner__c = acc.Id
+                                    );
+                         insert prod;
+        // Create a PricebookEntry
+        Pricebook2 pb = new Pricebook2(Name = 'Standard Price Book', IsActive = true);
+        insert pb;
+        Id pbId =Test.getStandardPricebookId(); 
+        PricebookEntry pbe = new PricebookEntry(Product2Id = prod.Id, Pricebook2Id = pbId, UnitPrice = 1000, IsActive = true);
+        insert pbe;
+        // Create a Quote
+        Quote qt = new Quote(
+            Name = 'Test Quote',
+            OpportunityId = opp.Id,
+            Approval_Status__c = 'Approved',
+            Status = 'Draft',
+            Contract_Generated__c = True,
+            PDF_Format_Type__c = 'GMS Standard',
+            Contract_PDF_Type__c = 'Shipman 2024',
+            CurrencyIsoCode = 'USD',
+            All_Vessels_in_One_Contract__c = 'No',
+            Pricebook2Id = pbId
+        );
+        insert qt;
+        // Create a Quote Line Item
+        QuoteLineItem qli = new QuoteLineItem(
+            QuoteId = qt.Id,
+            Product2Id = prod.Id,
+            UnitPrice = 1000,
+            Quantity = 1,
+            PricebookEntryId = pbe.Id
+        );
+        insert qli;
+        Contract__c ct = new Contract__c(
+            Name='Test ct',
+            BRSI0_Type_of_Contract__c = 'Bareboat',
+            Contract_Start_Date__c  =System.Today(),
+            RecordTypeId = contractRecordTypeId,
+            BRSI1_Place__c = 'IN'
+                );
+        insert ct;
+        Contract_Vessels__c coVessel = new Contract_Vessels__c(
+            Contract__c = ct.Id
+        );
+        insert coVessel;
+        // Set the Quote ID parameter in the VF Page
+        // Instantiate the controller class
+        Test.startTest();
+        PageReference pageRef = Page.AL_ContractGenerationVF;
+        pageRef.getParameters().put('id', qt.Id);
+        Test.setCurrentPage(pageRef);
+        AL_ContractGenerationCLS contractGen = new AL_ContractGenerationCLS();
+        contractGen.redirectToQuote();
+        contractGen.generateContract();  // Execute the method to generate contract
+        Test.stopTest();
+    }
+    static testMethod void testGenerateContract2() {
+        // Fetch the Record Type dynamically
+        Id contractRecordTypeId = [SELECT Id FROM RecordType WHERE DeveloperName = 'SupplyTime_2005' AND SObjectType = 'Contract__c' LIMIT 1].Id;
+        // Setup test data
+        Account acc = new Account(Name = 'Test Account');
+        insert acc;
+        Opportunity opp = new Opportunity(Name = 'Test Opportunity', StageName = 'Prospecting', CloseDate = System.today(),AccountId = acc.Id);
+        insert opp;
+        // Create a Vessel
+        Product2 prod = new Product2(Name = 'Test Vessel', IsActive = true,Year_Built__c='2000',
+                                     Length_Overall__c = '112',
+                                     POB__c = '22', 
+                                     Fire_Fighting_Fi_Fi__c = '112', 
+                                     Crane__c = 'No', 
+                                     DP_Non_DP__c = 'DP-1',
+                                     Port_of_Registry__c = 'Panama', 
+                                     Notation__c = 'New',
+                                     Deck_Area__c = '12',
+                                     Deadweight__c = '22',
+                                     GRT_NRT__c = '22', 
+                                     Vessel_Owner__c = acc.Id
+                                    );
+                         insert prod;
+        // Create a PricebookEntry
+        Pricebook2 pb = new Pricebook2(Name = 'Standard Price Book', IsActive = true);
+        insert pb;
+        Id pbId =Test.getStandardPricebookId(); 
+        PricebookEntry pbe = new PricebookEntry(Product2Id = prod.Id, Pricebook2Id = pbId, UnitPrice = 1000, IsActive = true);
+        insert pbe;
+        // Create a Quote
+        Quote qt = new Quote(
+            Name = 'Test Quote',
+            OpportunityId = opp.Id,
+            Approval_Status__c = 'Approved',
+            Status = 'Accepted',
+            PDF_Format_Type__c = 'GMS Standard',
+            Contract_Generated__c = false,
+            Contract_PDF_Type__c = 'SupplyTime 2005',
+            CurrencyIsoCode = 'USD',
+            All_Vessels_in_One_Contract__c = 'Yes',
+            Pricebook2Id = pbId,
+            Name_of_the_Common_Contract_Name__c ='Test'
+        );
+        insert qt;
+        // Create a Quote Line Item
+        QuoteLineItem qli = new QuoteLineItem(
+            QuoteId = qt.Id,
+            Product2Id = prod.Id,
+            UnitPrice = 1000,
+            Quantity = 1,
+            PricebookEntryId = pbe.Id
+        );
+        insert qli;
+        Contract__c ct = new Contract__c(
+            Name='Test ct',
+            BRSI0_Type_of_Contract__c = 'Bareboat',
+            Contract_Start_Date__c  =System.Today(),
+            RecordTypeId = contractRecordTypeId,
+            BRSI1_Place__c = 'IN'
+                );
+        insert ct;
+        Contract_Vessels__c coVessel = new Contract_Vessels__c(
+            Contract__c = ct.Id
+        );
+        insert coVessel;
+        // Set the Quote ID parameter in the VF Page
+        // Instantiate the controller class
+        Test.startTest();
+        PageReference pageRef = Page.AL_ContractGenerationVF;
+        pageRef.getParameters().put('id', qt.Id);
+        Test.setCurrentPage(pageRef);
+        AL_ContractGenerationCLS contractGen = new AL_ContractGenerationCLS();
+        contractGen.redirectToQuote();
+        contractGen.generateContract();  // Execute the method to generate contract
+        Test.stopTest();
+    }
+    static testMethod void testGenerateContract3() {
+        // Fetch the Record Type dynamically
+        Id contractRecordTypeId = [SELECT Id FROM RecordType WHERE DeveloperName = 'SupplyTime_2017' AND SObjectType = 'Contract__c' LIMIT 1].Id;
+        // Setup test data
+        Account acc = new Account(Name = 'Test Account');
+        insert acc;
+        Opportunity opp = new Opportunity(Name = 'Test Opportunity', StageName = 'Prospecting', CloseDate = System.today(),AccountId = acc.Id,Amount=1000);
+        insert opp;
+        // Create a Vessel
+        Product2 prod = new Product2(Name = 'Test Vessel', IsActive = true,Year_Built__c='2000',
+                                     Length_Overall__c = '112',
+                                     POB__c = '22', 
+                                     Fire_Fighting_Fi_Fi__c = '112', 
+                                     Crane__c = 'No', 
+                                     DP_Non_DP__c = 'DP-1',
+                                     Port_of_Registry__c = 'Panama', 
+                                     Notation__c = 'New',
+                                     Deck_Area__c = '12',
+                                     Deadweight__c = '22',
+                                     GRT_NRT__c = '22', 
+                                     Vessel_Owner__c = acc.Id
+                                    );
+                         insert prod;
+        // Create a PricebookEntry
+        Pricebook2 pb = new Pricebook2(Name = 'Standard Price Book', IsActive = true);
+        insert pb;
+        Id pbId =Test.getStandardPricebookId(); 
+        PricebookEntry pbe = new PricebookEntry(Product2Id = prod.Id, Pricebook2Id = pbId, UnitPrice = 1000, IsActive = true);
+        insert pbe;
+        // Create a Quote
+        Quote qt = new Quote(
+            Name = 'Test Quote',
+            OpportunityId = opp.Id,
+            Approval_Status__c = 'Approved',
+            Status = 'Accepted',
+            PDF_Format_Type__c = 'GMS Standard',
+            Contract_Generated__c = false,
+            Contract_PDF_Type__c = 'SupplyTime 2017',
+            CurrencyIsoCode = 'USD',
+            All_Vessels_in_One_Contract__c = 'No',
+            Pricebook2Id = pbId
+        );
+        insert qt;
+        // Create a Quote Line Item
+        QuoteLineItem qli = new QuoteLineItem(
+            QuoteId = qt.Id,
+            Product2Id = prod.Id,
+            UnitPrice = 1000,
+            Quantity = 1,
+            PricebookEntryId = pbe.Id
+        );
+        insert qli;
+        Contract__c ct = new Contract__c(
+            Name='Test ct',
+            BRSI0_Type_of_Contract__c = 'Bareboat',
+            Contract_Start_Date__c  =System.Today(),
+            RecordTypeId = contractRecordTypeId,
+            BRSI1_Place__c = 'IN'
+                );
+        insert ct;
+        Contract_Vessels__c coVessel = new Contract_Vessels__c(
+            Contract__c = ct.Id
+        );
+        insert coVessel;
+        // Set the Quote ID parameter in the VF Page
+        // Instantiate the controller class
+        Test.startTest();
+        PageReference pageRef = Page.AL_ContractGenerationVF;
+        pageRef.getParameters().put('id', qt.Id);
+        Test.setCurrentPage(pageRef);
+        AL_ContractGenerationCLS contractGen = new AL_ContractGenerationCLS();
+        contractGen.redirectToQuote();
+        contractGen.generateContract();  // Execute the method to generate contract
+        Test.stopTest();
+    }
+ 
+}
