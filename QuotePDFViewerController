@@ -1,0 +1,28 @@
+public with sharing class QuotePDFViewerController {
+  @AuraEnabled
+  public static String getVFPageName(String quoteId) {
+    try {
+      Quote qt = [
+        SELECT Id, PDF_Format_Type__c
+        FROM Quote
+        WHERE Id = :quoteId
+        WITH USER_MODE
+      ];
+      if (qt == null || String.isBlank(qt.PDF_Format_Type__c)) {
+        return null;
+      }
+      Quote_VF_Page_Mapping__mdt vfPageMapping = [
+        SELECT Quote_PDF_Format__c, VF_Page_Name__c
+        FROM Quote_VF_Page_Mapping__mdt
+        WHERE Quote_PDF_Format__c = :qt.PDF_Format_Type__c
+        WITH SYSTEM_MODE
+      ];
+      if (vfPageMapping == null) {
+        return null;
+      }
+      return vfPageMapping.VF_Page_Name__c;
+    } catch (Exception e) {
+      throw e;
+    }
+  }
+}
