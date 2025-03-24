@@ -1,0 +1,396 @@
+<apex:page renderAs="pdf" applyBodyTag="false" controller="JobCardPDFController">
+    <head>
+        <style>
+            @page {
+            	padding-top: 100px;
+            	padding-bottom: 30px;
+            	@top-center {
+            		content: element(header);
+            	}
+                @bottom-center {
+                	content: element(footer);
+                }
+            }
+            div.header {
+            	position: running(header);
+            }
+            div.footer {
+            	position: running(footer);
+            }
+            .pagenumber:before {
+            	content: counter(page);
+            }
+            .pagecount:before {
+            	content: counter(pages);
+            }
+        	td {
+            	border: 1px solid black;
+            	padding: 8px;
+            }
+            .srno {
+            	text-align: center;
+            }
+            .small-font {
+            	font-size: 12px;
+            }
+            .medium-font {
+            	font-size: 14px;
+            }
+            .red-font {
+            	color: red;
+            }
+            .no-border {
+            	border: none;
+            }
+            .box {
+            	height: 10px;
+            	width: 10px;
+            	border: 1px solid black;
+            }
+            .inner-table td {
+            	border: none;
+            	vertical-align: top;
+            }
+        </style>
+    </head>
+    
+    <body style="font-size: 16px;">
+        <div class="header">
+            <table style="width: 100%;">
+                <tr style="text-align: right;">
+                	<td class="no-border">
+                    	<apex:image url="{!$Resource.ShipWorkz_Logo}" height="50"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="no-border" style="padding-left: 16px;">
+                        <div>
+                            <b><span style="font-size: 20px;">JOB CARD </span>- CHARTER NOTIFICATION &amp; ACKNOWLEDGEMENT FORM</b>
+                        </div>
+                        <div>
+                            SWZ-FRM-02.01
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="footer">
+            <table style="width: 100%;">
+                <tbody>
+                    <tr class="small-font">
+                        <td class="no-border" style="width: 90%;">
+                            <div>
+                                Revision 00. Original Date: 09/10/2024. Version date: 09/10/2024
+                            </div>
+                            <div>
+                                Prepared by: Shipworkz QHSSE. Validated by: Shipworkz QHSSE Manager. Approved by Shipworkz Executive Chairman
+                            </div>
+                        </td>
+                        <td class="no-border" style="width: 10%; text-align: right; font-size: 10px;">
+                            <div><span class="pagenumber"/> / <span class="pagecount"/></div>                        	
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <table style="width: 100%; border: 1px solid black; border-collapse: collapse;">
+            <tbody>
+                <tr>
+                    <td colspan="4" style="background: #153d63; color: white; padding: 4px;">
+                        <b>
+                            To be Filled by Chartering Team
+                        </b>
+                    </td>
+                </tr>
+            	<tr>
+                	<td class="srno">1</td>
+                    <td>Name of Charterer</td>
+                    <td colspan="2" class="medium-font"><b>{!jc.Name_of_Charterer__r.Name}</b></td>
+                </tr>
+                <tr>
+                    <td class="srno">2</td>
+                    <td>Nominated Vessel(s)</td>
+                    <td colspan="2" class="medium-font"><b>{!jc.Nominated_Vessel_s__r.Name}</b></td>
+                </tr>
+                <tr>
+                    <td class="srno">3</td>
+                    <td >Type of Charter</td>
+                    <td colspan="2">
+                        <table class="inner-table small-font" style="width: 100%;">
+                            <tbody>
+                            	<tr>
+                                	<td style="width: 20%;">
+                                        <div class="box" style="margin-left: 18px;">
+                                            <apex:outputPanel rendered="{!jc.Type_of_Charter__c == 'Spot'}">
+                                                <div style="background: black; width: 6px; height: 6px; margin: 2px;">
+                                                </div>
+                                            </apex:outputPanel>
+                                        </div>    
+                                    </td>
+                                    <td style="width: 60%;">
+                                        <div class="box" style="margin-left: 75px;">
+                                            <apex:outputPanel rendered="{!jc.Type_of_Charter__c == 'Time / Voyage / Towage'}">
+                                                <div style="background: black; width: 6px; height: 6px; margin: 2px;">
+                                                </div>
+                                            </apex:outputPanel>
+                                        </div>
+                                    </td>
+                                    <td style="width: 20%;">
+                                        <div class="box" style="margin-left: 18px;">
+                                            <apex:outputPanel rendered="{!jc.Type_of_Charter__c == 'Bareboat'}">
+                                                <div style="background: black; width: 6px; height: 6px; margin: 2px;">
+                                                </div>
+                                            </apex:outputPanel>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                	<td style="text-align: center;">Spot</td>
+                                    <td style="text-align: center;">Time / Voyage / Towage</td>
+                                	<td style="text-align: center;">Bareboat</td>
+                                </tr>
+                                <tr>
+                                	<td colspan="3">
+                                        <apex:outputPanel rendered="{!ISNULL(jc.Other_Type_of_Charter__c)}">
+                                        	Any Other, Please Specify ___________
+                                        </apex:outputPanel>
+                                    	<apex:outputPanel rendered="{!NOT(ISNULL(jc.Other_Type_of_Charter__c))}">
+                                        	Any Other, Please Specify <u>{!jc.Other_Type_of_Charter__c}</u>
+                                        </apex:outputPanel>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="srno">4</td>
+                    <td>End Client / Intermediaries<br/>
+                        <span class="small-font">
+                            (End clients like ADNOC, ARAMCO etc has specific requirements. This information is to help the team to prepare the vessel to those requirements)
+                        </span>
+                    </td>
+                    <td colspan="2" class="medium-font"><b>{!jc.End_Client_Intermediaries__r.Name}</b></td>
+                </tr>
+                <tr>
+                    <td class="srno">5</td>
+                    <td>Charter Commencement Date</td>
+                    <td colspan="2" class="medium-font"><b>Data</b></td>
+                </tr>
+                <tr>
+                    <td class="srno">6</td>
+                    <td>Vessel to be ready by:</td>
+                    <td colspan="2" class="medium-font"><b>Data</b></td>
+                </tr>
+                <tr>
+                    <td class="srno">7</td>
+                    <td>Charter Period / Duration</td>
+                    <td colspan="2" class="medium-font"><b>Data</b></td>
+                </tr>
+                <tr>
+                    <td class="srno">8</td>
+                    <td>Port of Delivery / Redelivery</td>
+                    <td colspan="2" class="medium-font"><b>Data</b></td>
+                </tr>
+                <tr>
+                    <td class="srno">9</td>
+                    <td>Area of operation</td>
+                    <td colspan="2" class="medium-font"><b>Data</b></td>
+                </tr>
+                <tr>
+                    <td class="srno">10</td>
+                    <td>Scope of work<br/>
+                        <span class="small-font">
+                            (Please describe this in detail. <span class="red-font">Any special requirements other than normal scope must be clearly highlighted</span>)
+                        </span>
+                    </td>
+                    <td colspan="2"><b>Non-DP Supply vessel to support NMDC’s energy’s offshore operations. (Attached Appendix-A (SV), SV - NPCC Checklist). CPA: AMS2024-431 to be shared once executed.</b></td>
+                </tr>
+                <tr>
+                    <td class="srno" rowspan="4">11</td>
+                    <td rowspan="4">Crewing Details</td>
+                    <td class="small-font">Crewing above Minimum Safe Manning if required (Type of Crew and Number)</td>
+                    <td class="small-font"><b>Data</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Any additional training than STCW (State courses)</td>
+                    <td><b>Data</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Visas &amp; Permits</td>
+                    <td><b>As required</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>APPENDIX 1 To be filled up</td>
+                    <td><b>Data</b></td>
+                </tr>
+                <tr>
+                    <td class="srno" rowspan="16">12</td>
+                    <td rowspan="16">
+                        Operational Requirements
+                        <br/>
+                        <span class="small-font">
+                            (Minimum details are stated. Please add any special requirements in the 'Any other requirements' field))
+                        </span>
+                    </td>
+                    <td class="small-font">Type of vessel Inspections to be arranged</td>
+                    <td class="small-font"><b>As required</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Onhire/ Offhire Survey<br/>(By client or company)</td>
+                    <td><b>Data</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Bridging document (Yes/ No)</td>
+                    <td><b>As required</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Communication requirements (VSAT, DGPS, etc.)</td>
+                    <td><b>Data</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>No. of client personnel onboard (if any)</td>
+                    <td><b>Data</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Meals and accommodation to be arranged for client personnel</td>
+                    <td><b>Data</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Any special requirements for client personnel</td>
+                    <td><b>Data</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Fuel / Lube / Water: By client or by company</td>
+                    <td><b>Data</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Agency / Port dues / Tugs / Berthing: By client or by company</td>
+                    <td><b>Data</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Cargo / Cargo lashing requirements</td>
+                    <td><b>As required</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Any special area charts to be arranged?</td>
+                    <td><b>As required</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Catering requirements</td>
+                    <td><b>Data</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Any purchases required<br/><span class="small-font">(operational spares, stores, etc)</span></td>
+                    <td><b>As required</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Any permits required<br/><span class="small-font">(Eg: FEP, CEP, NL, etc.)</span></td>
+                    <td><b>As required</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Weather Service (by client or company)</td>
+                    <td><b>Data</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Any other requirements</td>
+                    <td><b>Data</b></td>
+                </tr>
+                <tr>
+                    <td class="srno" rowspan="5">13</td>
+                    <td rowspan="5">
+                        Technical Requirements
+                        <br/>
+                        <span class="small-font">
+                            (Minimum details are stated. Please add any special requirements in the 'Any other requirements' field))
+                        </span>
+                    </td>
+                    <td class="small-font">Type of vessel Inspections to be arranged</td>
+                    <td class="small-font"><b>As per BMVSR Compliance &amp; Appendix-A (SV), SV - NPCC Checklist (Attached)</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Modification of vessel required (if any)</td>
+                    <td><b>As per BMVSR Compliance &amp; Appendix-A (SV), SV - NPCC Checklist (Attached)</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Any client technical specifications to be met<br/><span class="small-font">(Please attach details)</span></td>
+                    <td><b>As per BMVSR Compliance &amp; Appendix-A (SV), SV - NPCC Checklist (Attached)</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Any purchases required<br/><span class="small-font">(technical spares, stores, etc.)</span></td>
+                    <td><b>As required</b></td>
+                </tr>
+                <tr class="small-font">
+                    <td>Any other requirements</td>
+                    <td><b>Appendix-A (SV), SV - NPCC Checklist (Attached)</b></td>
+                </tr>
+                <tr>
+                    <td class="srno">14.</td>
+                    <td>Contact details of the charterer's representatives for direct liaison if required.</td>
+                    <td colspan="2">
+                        Muhammad Kashif Latif (<a href="mailto:kashif.latif@nmdc-group.com">kashif.latif@nmdc-group.com</a>)<br/>
+                        Hazem Bashandy (<a href="mailto:hazem.bashandy@nmdc-group.com">hazem.bashandy@nmdc-group.com</a>)<br/>
+                        Mohamed Baligh (<a href="mailto:mohamed.baligh@nmdc-group.com">mohamed.baligh@nmdc-group.com</a>)<br/>
+                        Mohamad Ali Busso (<a href="mailto:mohamad.busso@nmdc-group.com">mohamad.busso@nmdc-group.com</a>)
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srno">15.</td>
+                    <td>Name of the Chartering PIC</td>
+                    <td colspan="2">Indu Sreekumar (<a href="mailto:chartering@allianzmarine.org">chartering@allianzmarine.org</a>)</td>
+                </tr>
+                
+                <tr>
+                    <td colspan="4" style="background: #153d63; color: white; padding: 4px;">
+                        <b>Operations Superintendent (OSI)</b>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srno">16.</td>
+                    <td>
+                        Notes from OSI
+                        <br/>
+                        <span class="small-font">
+                            (<span class="red-font">OSI confirms that the vessel will be operationally ready on the date of mobilization as per charter requirement above.</span> Any challenges in meeting the requirements, deviation in timelines, risks, etc., must be specified in this box)
+                        </span>
+                    </td>
+                    <td colspan="2"></td>
+                </tr>
+                
+                <tr>
+                    <td class="srno">17.</td>
+                    <td>Name of OSI</td>
+                    <td colspan="2"></td>
+                </tr>
+                
+                <tr>
+                    <td colspan="4" style="background: #153d63; color: white; padding: 4px;">
+                        <b>Technical Superintendent (TSI)</b>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="srno">18.</td>
+                    <td>
+                        Notes from TSI
+                        <br/>
+                        <span class="small-font">
+                            (<span class="red-font">TSI confirms that the vessel will be technically ready on the date of mobilization as per charter requirement above.</span> Any challenges in meeting the requirements, deviation in timelines, risks, etc., must be specified in this box)
+                        </span>
+                    </td>
+                    <td colspan="2"></td>
+                </tr>
+                
+                <tr>
+                    <td class="srno">19.</td>
+                    <td>Name of TSI</td>
+                    <td colspan="2"></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</apex:page>
